@@ -1,0 +1,61 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*------------------div1样式---------------------------*/
+.mouseoverDiv{
+	width: 500px; 
+	height: auto;
+	margin:0 auto;
+	}
+.mouseoverDiv ul { 
+	padding: 10px; 
+	list-style: none;
+	}
+.mouseoverDiv ul li {
+	width: 460px;
+	height: auto;
+	line-height: normal;
+	margin-top: 10px;
+	padding: 10px;
+	background: #09C;
+	}
+/*------------------div2样式---------------------------*/
+.addtooltip {
+	height: auto;
+	font-size:14px;
+	background: #0CF; 
+	display: none; 
+	position: absolute;
+	padding:10px;
+	border-radius: 4px;
+	box-shadow: 0px 0px 3px rgba(0,0,0,0.5)
+	}
+
+.tooltipText{ 
+	width: 100px; 
+	height: auto; 
+	display: none;
+	}
+.btn {
+	display: inline-block;
+	width: 150px;
+	height: auto;
+	position: absolute;
+	font-size: 14px;
+}
+input {
+	display: block;
+	width: 50px;
+	height: 30px;
+	margin: 5px;
+	float: left;
+}
+.btn {
+	position: fixed;
+	top: 30px;
+	left: 100px;
+}
+.btn a {
+	display: block;
+	margin: 5px;
+}
