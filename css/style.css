@@ -1,6 +1,10 @@
 @charset "utf-8";
 /* CSS Document */
 
+body{
+	padding: 50px 0;
+}
+
 /*------------------div1样式---------------------------*/
 .mouseoverDiv{
 	width: 500px; 
@@ -36,8 +40,9 @@
 	height: auto; 
 	display: none;
 	}
+
 .btn {
-	display: inline-block;
+	float:left;
 	width: 150px;
 	height: auto;
 	position: absolute;

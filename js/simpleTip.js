@@ -92,20 +92,20 @@
 
 			switch(position){
 				case 'right' :
-					_left = obj.offsetLeft + obj.offsetWidth + offset;
-					_top = obj.offsetTop + (obj.offsetHeight - tipEle.outerHeight())/2;
+					_left = $(obj).offset().left + $(obj).outerWidth() + offset;
+					_top = $(obj).offset().top + ($(obj).outerHeight() - tipEle.outerHeight())/2;
 					break;
 				case 'left' :
-					_left = obj.offsetLeft - tipEle.outerWidth() - offset;
-					_top = obj.offsetTop + (obj.offsetHeight - tipEle.outerHeight())/2;
+					_left = $(obj).offset().left - tipEle.outerWidth() - offset;
+					_top = $(obj).offset().top + ($(obj).outerHeight() - tipEle.outerHeight())/2;
 					break;
 				case 'top' :
-					_left = obj.offsetLeft + (obj.offsetWidth - tipEle.outerWidth())/2;
-					_top = obj.offsetTop - tipEle.outerHeight() - offset;
+					_left = $(obj).offset().left + ($(obj).outerWidth() - tipEle.outerWidth())/2;
+					_top = $(obj).offset().top - tipEle.outerHeight() - offset;
 					break;
 				case 'bottom' :
-					_left = obj.offsetLeft + (obj.offsetWidth - tipEle.outerWidth())/2;
-					_top = obj.offsetTop + obj.offsetHeight + offset;
+					_left = $(obj).offset().left + ($(obj).outerWidth() - tipEle.outerWidth())/2;
+					_top = $(obj).offset().top + $(obj).outerHeight() + offset;
 					break;
 			}
 
@@ -124,12 +124,11 @@
 		}
 
 		//取消tooltip功能
-		,destroy: function(ele) {
+		,destroy: function(ele){
 			if(ele.tipOptions){
 				$(ele).off(ele.tipOptions.action.show, oToolTip.show).off(ele.tipOptions.action.hide, oToolTip.hide);
 				ele.oTipEle.remove();
-				delete ele.oTipEle;
-				delete ele.tipOptions;
+				ele.oTipEle = ele.tipOptions = null;
 			}
 		}
 	}
