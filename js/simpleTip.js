@@ -15,28 +15,28 @@
 			switch (options){
 				case "show" : 
 					return this.each(function(){
-						this.oTipEle && oToolTip.show.call(this);
+						this.tipEle && oToolTip.show.call(this);
 					});
 					break;
 				case "hide" :
 					return this.each(function(){
-						this.oTipEle && oToolTip.hide.call(this);
+						this.tipEle && oToolTip.hide.call(this);
 					});
 					break;
 				case "destroy" :
 					return this.each(function(){
-						this.oTipEle && oToolTip.destroy(this);
+						this.tipEle && oToolTip.destroy(this);
 					});
 					break;
 				case "content" :
 					return this.each(function(){
-						this.oTipEle && this.oTipEle.html(value || '');
+						this.tipEle && this.tipEle.html(value || '');
 						oToolTip.setPosition(this); // 如果已经显示则刷新位置
 					});
 					break;
 				case "position" :
 					return this.each(function(){
-						if(this.oTipEle){
+						if(this.tipEle){
 							value && (this.tipOptions = $.extend({}, this.tipOptions)) && (this.tipOptions.position = value);
 							oToolTip.setPosition(this);
 						}
@@ -44,7 +44,7 @@
 					break;
 				case "follow" :
 					return this.each(function(){
-						if(this.oTipEle){
+						if(this.tipEle){
 							value && (this.tipOptions = $.extend({}, this.tipOptions)) && (this.tipOptions.follow = value);
 						}
 					});
@@ -55,17 +55,29 @@
 
 		var _opts = $.extend( true, {}, $.fn.simpleTip.defaults, options);
 		return this.each(function(){
-
+			var target = this;
 			if(this.tipOptions){ //如果已经存在则注销，在重新创建
 				$(this).simpleTip('destroy');
 			}
 
 			this.tipOptions = _opts;
-			oToolTip.createTip(this); //为参数对象创建tooltip
+			this.tipEle = oToolTip.createTip(this); //为参数对象创建tooltip
 
 			// 绑定显示tooltip和隐藏tooltip的方法
 			$(this).on(this.tipOptions.show.action, oToolTip.show);
 			$(this).on(this.tipOptions.hide.action, oToolTip.hide);
+
+			if(this.tipOptions.keep){	// 鼠标移上去保持显示
+				this.tipEle.on('mouseenter',function(){
+					if(target.timeoutHide){
+						clearTimeout(target.timeoutHide);
+					};
+					oToolTip.show.call(target);
+				});
+				this.tipEle.on('mouseleave',function(){
+					oToolTip.hide.call(target);
+				});
+			}
 
 		});
 	}
@@ -76,16 +88,17 @@
 		,show : {
 			action : 'mouseenter'
 			,delay : 0
-			,animate : 'fade'
+			,animate : false
 		}
 		,hide : {
 			action : 'mouseleave'
 			,delay : 0
-			,animate : 'fade'
+			,animate : false
 		}
 		,position: 'right'		// tip 位置
 		,offset: {x:0, y:0}		// 定位偏移
-		,follow : false			// 跟随鼠标 
+		,follow : false			// 跟随鼠标
+		,keep : true 			// 鼠标移上去保持显示
 	};
 	
 	var oToolTip = {
@@ -93,16 +106,15 @@
 		//创建DIV
 		createTip: function(obj){
 			var oText = $.parseHTML(obj.tipOptions.content);	// 创建一个内容为content的文本节点
-			obj.oTipEle = $('<div></div>');
-			$(obj.oTipEle).addClass("addtooltip").append($(oText)).appendTo('body');	// 为tooltip设置class,并将tooltip标签追加到文档中
+			var tipEle = $('<div></div>').addClass("addtooltip").append($(oText)).appendTo('body');	// 为tooltip设置class,并将tooltip标签追加到文档中
+			return tipEle;
 		}
 
 		//定位
 		,setPosition: function(obj){
-			
 			if(obj.tipOptions.follow){return;} // 跟随鼠标
 			
-			var tipEle = obj.oTipEle;
+			var tipEle = obj.tipEle;
 			var position = obj.tipOptions.position;
 			var offset = obj.tipOptions.offset;
 			var _left,_top;
@@ -138,26 +150,26 @@
 			var follow = tip.tipOptions.follow;
 			var showOptions = tip.tipOptions.show;
 
-			if(showOptions.delayShow){
+			if(showOptions.delay){
 				setTimeout(function(){
 					if(showOptions.animate == 'fade'){
-						$(tip.oTipEle).fadeIn();
+						$(tip.tipEle).stop().fadeIn();
 					}else{
-						$(tip.oTipEle).show();
+						$(tip.tipEle).show();
 					}
-				}, showOptions.delayShow);
+				}, showOptions.delay);
 			}else{
 				if(showOptions.animate == 'fade'){
-					$(tip.oTipEle).fadeIn();
+					$(tip.tipEle).stop().fadeIn();
 				}else{
-					$(tip.oTipEle).show();
+					$(tip.tipEle).show();
 				}
 			}
 
 			if(follow){ // 跟随鼠标
-				var oTipEle = tip.oTipEle;
+				var tipEle = tip.tipEle;
 				$(document).on('mousemove', function(event) {
-					oTipEle.css({
+					tipEle.css({
 						left : event.pageX + 12,
 						top : event.pageY + 24
 					});
@@ -168,16 +180,26 @@
 		//隐藏tooltip
 		,hide: function(){
 			var tip = this;
-			
-			var delayHide = tip.tipOptions.hide.delay;
-			if(delayHide){
-				setTimeout(function(){$(tip.oTipEle).hide()}, delayHide);
+			var hideOptions = tip.tipOptions.hide;
+
+			if(hideOptions.delay){
+				setTimeout(function(){
+					if(hideOptions.animate == 'fade'){
+						$(tip.tipEle).stop().fadeOut();
+					}else{
+						$(tip.tipEle).hide();
+					}
+				}, hideOptions.delay);
 			}else{
-				$(tip.oTipEle).hide()
+				if(hideOptions.animate == 'fade'){
+					$(tip.tipEle).stop().fadeOut();
+				}else{
+					$(tip.tipEle).hide();
+				}
 			}
 
 			if(tip.tipOptions.follow){ // 清除跟随鼠标
-				var oTipEle = tip.oTipEle;
+				var tipEle = tip.tipEle;
 				$(document).off('mousemove');
 			}
 		}
@@ -186,8 +208,8 @@
 		,destroy: function(ele){
 			if(ele.tipOptions){
 				$(ele).off(ele.tipOptions.show.action, oToolTip.show).off(ele.tipOptions.hide.action, oToolTip.hide);
-				ele.oTipEle.remove();
-				ele.oTipEle = ele.tipOptions = null;
+				ele.tipEle.remove();
+				ele.tipEle = ele.tipOptions = null;
 			}
 		}
 	}
