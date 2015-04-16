@@ -64,8 +64,8 @@
 			oToolTip.createTip(this); //为参数对象创建tooltip
 
 			// 绑定显示tooltip和隐藏tooltip的方法
-			$(this).on(this.tipOptions.action.show, oToolTip.show);
-			$(this).on(this.tipOptions.action.hide, oToolTip.hide);
+			$(this).on(this.tipOptions.show.action, oToolTip.show);
+			$(this).on(this.tipOptions.hide.action, oToolTip.hide);
 
 		});
 	}
@@ -73,13 +73,15 @@
 	//为参数设置默认值
 	$.fn.simpleTip.defaults = {
 		content : "I'm a tooltip!"
-		,action : {	// 显示隐藏事件
-			show : 'mouseover'
-			,hide : 'mouseout'
+		,show : {
+			action : 'mouseover'
+			,delay : 0
+			,animate : false
 		}
-		,delay : {	// 显示隐藏延迟
-			show : 0,
-			hide : 0
+		,hide : {
+			action : 'mouseout'
+			,delay : 0
+			,animate : false
 		}
 		,follow : false	// 跟随鼠标 
 		,offset: {x:0, y:0} // 定位偏移
@@ -133,7 +135,7 @@
 			var tip = this;
 			oToolTip.setPosition(tip);
 
-			var delayShow = tip.tipOptions.delay.show;
+			var delayShow = tip.tipOptions.show.delay;
 			if(delayShow){
 				setTimeout(function(){$(tip.oTipEle).show()}, delayShow);
 			}else{
@@ -155,7 +157,7 @@
 		,hide: function(){
 			var tip = this;
 			
-			var delayHide = tip.tipOptions.delay.hide;
+			var delayHide = tip.tipOptions.hide.delay;
 			if(delayHide){
 				setTimeout(function(){$(tip.oTipEle).hide()}, delayHide);
 			}else{
@@ -171,7 +173,7 @@
 		//取消tooltip功能
 		,destroy: function(ele){
 			if(ele.tipOptions){
-				$(ele).off(ele.tipOptions.action.show, oToolTip.show).off(ele.tipOptions.action.hide, oToolTip.hide);
+				$(ele).off(ele.tipOptions.show.action, oToolTip.show).off(ele.tipOptions.hide.action, oToolTip.hide);
 				ele.oTipEle.remove();
 				ele.oTipEle = ele.tipOptions = null;
 			}
