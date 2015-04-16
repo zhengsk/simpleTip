@@ -74,16 +74,16 @@
 	$.fn.simpleTip.defaults = {
 		content : "I'm a tooltip!"
 		,show : {
-			action : 'mouseover'
+			action : 'mouseenter'
 			,delay : 0
-			,animate : false
+			,animate : 'fade'
 		}
 		,hide : {
-			action : 'mouseout'
+			action : 'mouseleave'
 			,delay : 0
-			,animate : false
+			,animate : 'fade'
 		}
-		,position: 'left'		// tip 位置
+		,position: 'right'		// tip 位置
 		,offset: {x:0, y:0}		// 定位偏移
 		,follow : false			// 跟随鼠标 
 	};
@@ -135,14 +135,26 @@
 			var tip = this;
 			oToolTip.setPosition(tip);
 
-			var delayShow = tip.tipOptions.show.delay;
-			if(delayShow){
-				setTimeout(function(){$(tip.oTipEle).show()}, delayShow);
+			var follow = tip.tipOptions.follow;
+			var showOptions = tip.tipOptions.show;
+
+			if(showOptions.delayShow){
+				setTimeout(function(){
+					if(showOptions.animate == 'fade'){
+						$(tip.oTipEle).fadeIn();
+					}else{
+						$(tip.oTipEle).show();
+					}
+				}, showOptions.delayShow);
 			}else{
-				$(tip.oTipEle).show()
+				if(showOptions.animate == 'fade'){
+					$(tip.oTipEle).fadeIn();
+				}else{
+					$(tip.oTipEle).show();
+				}
 			}
 
-			if(tip.tipOptions.follow){ // 跟随鼠标
+			if(follow){ // 跟随鼠标
 				var oTipEle = tip.oTipEle;
 				$(document).on('mousemove', function(event) {
 					oTipEle.css({

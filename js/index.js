@@ -3,11 +3,6 @@ $(function(){
 
 	$('#div1 li').simpleTip({
 		content : "I'm a tooltip too!",
-		action : {		
-			show : 'mouseover',
-			hide : 'mouseout'
-		}
-		,position : 'right'
 		//,offset : {x:5, y:5}
 	}).css("fontFamily","微软雅黑")//.eq(1).simpleTip('show');	
 
