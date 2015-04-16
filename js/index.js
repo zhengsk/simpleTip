@@ -5,12 +5,12 @@ $(function(){
 		content : "I'm a <br/> tooltip!"
 		,show : {
 			action : 'mouseenter'
-			,delay : 0
+			,delay : 500
 			,animate : 'fade'
 		}
 		,hide : {
 			action : 'mouseleave'
-			,delay : 0
+			,delay : 500
 			,animate : 'fade'
 		}
 		,position : 'right'		// tip 位置
@@ -18,6 +18,20 @@ $(function(){
 		,offset: {x:0, y:0}		// 定位偏移
 		,follow : false			// 跟随鼠标
 		,keep : true // 鼠标移上去保持显示
+		,events	 : {
+			beforeShow : function(tip) {
+				console.info('beforeShow')
+			}
+			,beforeHide : function(tip) {
+				console.info('beforeHide')
+			}
+			,afterShow : function(tip) {
+				console.info('afterShow')
+			}
+			,afterHide : function(tip) {
+				console.info('afterHide')
+			}
+		}
 	})
 	.css("fontFamily","微软雅黑")//.eq(1).simpleTip('show');	
 

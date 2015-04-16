@@ -62,6 +62,7 @@
 
 			this.tipOptions = _opts;
 			this.tipEle = oToolTip.createTip(this); //为参数对象创建tooltip
+			this.isShowed = false;
 
 			// 绑定显示tooltip和隐藏tooltip的方法
 			$(this).on(this.tipOptions.show.action, oToolTip.show);
@@ -103,6 +104,12 @@
 		,offset: {x:0, y:0}		// 定位偏移
 		,follow : false			// 跟随鼠标
 		,keep : true 			// 鼠标移上去保持显示
+		,events	 : {
+			beforeShow : false
+			,beforeHide : false
+			,afterShow : false
+			,afterHide : false
+		}
 	};
 	
 	var oToolTip = {
@@ -150,32 +157,52 @@
 			$(tipEle).removeClass().addClass(position + ' simpleTip-wrapper').css({"top":_top + "px","left":_left + "px"});			// 定位tooltip
 		}
 
+		//设置显示/隐藏tooltip, 内部方法, funName: ['show'|'hide']
+		,_display: function(tip, funName) {
+			var showOptions = tip.tipOptions.show;
+			var beforeFun = tip.tipOptions.events['before' + funName.charAt(0).toUpperCase()+ funName.substr(1)];
+			var afterFun = tip.tipOptions.events['after' + funName.charAt(0).toUpperCase()+ funName.substr(1)];
+
+			// 显示状态是否发生变化
+			var isChangeVisable = (funName === "show" && tip.isShowed === false) || (funName === "hide" && tip.isShowed === true);
+
+			if(beforeFun && isChangeVisable){ // beforeShow function
+				beforeFun.call(tip);
+			}
+
+			// 显示状态是否发生变化后执行回调
+			var _afterChange = function(){
+				if(isChangeVisable){
+					afterFun && afterFun.call(tip);
+					tip.isShowed = funName === "show" ? true : false;; //设置是否显示属性
+				}
+			}
+
+			if(showOptions.animate === 'fade'){
+				var fun = funName === "show" ? "fadeIn" : "fadeOut";
+				$(tip.tipEle).stop()[fun](200, _afterChange);
+			}else{
+				$(tip.tipEle)[funName](0, _afterChange);
+			}
+		}
+
 		//显示tooltip,并为其定位
 		,show: function(){
 			var tip = this;
 			oToolTip.setPosition(tip);
 
-			var follow = tip.tipOptions.follow;
-			var showOptions = tip.tipOptions.show;
+			var delay = tip.tipOptions.show.delay;
 
-			if(showOptions.delay){
+			if(delay){
 				tip.timeoutToogle && clearTimeout(tip.timeoutToogle);
 				tip.timeoutToogle = setTimeout(function(){
-					if(showOptions.animate == 'fade'){
-						$(tip.tipEle).stop().fadeIn(200);
-					}else{
-						$(tip.tipEle).show();
-					}
-				}, showOptions.delay);
+					oToolTip._display(tip, 'show');
+				}, delay);
 			}else{
-				if(showOptions.animate == 'fade'){
-					$(tip.tipEle).stop().fadeIn(200);
-				}else{
-					$(tip.tipEle).show();
-				}
+				oToolTip._display(tip, 'show');
 			}
 
-			if(follow){ // 跟随鼠标
+			if(tip.tipOptions.follow){ // 跟随鼠标
 				var tipEle = tip.tipEle;
 				tipEle.removeClass().addClass('simpleTip-wrapper');
 				$(tip).on('mousemove', function(event) {
@@ -190,23 +217,15 @@
 		//隐藏tooltip
 		,hide: function(){
 			var tip = this;
-			var hideOptions = tip.tipOptions.hide;
+			var delay = tip.tipOptions.hide.delay;
 
-			if(hideOptions.delay){
+			if(delay){
 				tip.timeoutToogle && clearTimeout(tip.timeoutToogle);
 				tip.timeoutToogle = setTimeout(function(){
-					if(hideOptions.animate == 'fade'){
-						$(tip.tipEle).stop().fadeOut(200);
-					}else{
-						$(tip.tipEle).hide();
-					}
-				}, hideOptions.delay);
+					oToolTip._display(tip, 'hide');
+				}, delay);
 			}else{
-				if(hideOptions.animate == 'fade'){
-					$(tip.tipEle).stop().fadeOut(200);
-				}else{
-					$(tip.tipEle).hide();
-				}
+				oToolTip._display(tip, 'hide');
 			}
 
 			if(tip.tipOptions.follow){ // 清除跟随鼠标
