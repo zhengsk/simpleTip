@@ -1,7 +1,7 @@
 // JavaScript Document 
 $(function(){
 
-	$('#div1 li').simpleTip({
+	$('#div1 li').simpleTip({ 
 		content : "I'm a <br/> tooltip!"
 		,show : {
 			action : 'mouseenter'
@@ -63,7 +63,23 @@ $(function(){
 	});
 
 	$('#createTip').bind('click', function(){
-		$('#div1 li').eq(0).simpleTip({content:'what\'s you name'}).simpleTip('show');
+		$('#div1 li').eq(0).simpleTip({
+			content:'what\'s you name',
+			events: {
+				beforeShow : function(tip) {
+					console.info('beforeShow')
+				}
+				,beforeHide : function(tip) {
+					console.info('beforeHide')
+				}
+				,afterShow : function(tip) {
+					console.info('afterShow')
+				}
+				,afterHide : function(tip) {
+					console.info('afterHide')
+				}
+			}
+		}).simpleTip('show');
 	});
 
 	$('#followTip').bind('click', function(){
