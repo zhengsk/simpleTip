@@ -2,19 +2,19 @@
 $(function(){
 
 	$('#div1 li').simpleTip({
-		content : "I'm a tooltip!"
+		content : "I'm a <br/> tooltip!"
 		,show : {
 			action : 'mouseenter'
-			,delay : 200
+			,delay : 0
 			,animate : 'fade'
 		}
 		,hide : {
 			action : 'mouseleave'
-			,delay : 200
+			,delay : 0
 			,animate : 'fade'
 		}
 		,position : 'right'		// tip 位置
-		,spacing : 10			// tip 间距
+		,spacing : 2			// tip 间距
 		,offset: {x:0, y:0}		// 定位偏移
 		,follow : false			// 跟随鼠标
 		,keep : true // 鼠标移上去保持显示

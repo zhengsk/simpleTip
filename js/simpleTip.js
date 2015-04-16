@@ -30,7 +30,7 @@
 					break;
 				case "content" :
 					return this.each(function(){
-						this.tipEle && this.tipEle.html(value || '');
+						this.tipEle && this.tipEle.tipContent.html(value || '');
 						oToolTip.setPosition(this); // 如果已经显示则刷新位置
 					});
 					break;
@@ -110,7 +110,10 @@
 		//创建DIV
 		createTip: function(obj){
 			var oText = $.parseHTML(obj.tipOptions.content);	// 创建一个内容为content的文本节点
-			var tipEle = $('<div></div>').addClass("addtooltip").append($(oText)).appendTo('body');	// 为tooltip设置class,并将tooltip标签追加到文档中
+			var tipEle = $('<div></div>').addClass("simpleTip-wrapper");	// 为tooltip设置class,并将tooltip标签追加到文档中
+			var tipArrow = $('<span class="simpleTip-arrow"></span>');	// 为tooltip 方向箭头
+			var tipContent = tipEle.tipContent = $('<div class="simpleTip-content"></div>').append($(oText));	// 内容容器
+			tipEle.append(tipArrow).append(tipContent).appendTo('body');
 			return tipEle;
 		}
 
@@ -144,7 +147,7 @@
 					break;
 			}
 
-			$(tipEle).css({"top":_top + "px","left":_left + "px"});			// 定位tooltip
+			$(tipEle).removeClass().addClass(position + ' simpleTip-wrapper').css({"top":_top + "px","left":_left + "px"});			// 定位tooltip
 		}
 
 		//显示tooltip,并为其定位
@@ -159,14 +162,14 @@
 				tip.timeoutToogle && clearTimeout(tip.timeoutToogle);
 				tip.timeoutToogle = setTimeout(function(){
 					if(showOptions.animate == 'fade'){
-						$(tip.tipEle).stop().fadeIn();
+						$(tip.tipEle).stop().fadeIn(200);
 					}else{
 						$(tip.tipEle).show();
 					}
 				}, showOptions.delay);
 			}else{
 				if(showOptions.animate == 'fade'){
-					$(tip.tipEle).stop().fadeIn();
+					$(tip.tipEle).stop().fadeIn(200);
 				}else{
 					$(tip.tipEle).show();
 				}
@@ -174,10 +177,11 @@
 
 			if(follow){ // 跟随鼠标
 				var tipEle = tip.tipEle;
+				tipEle.removeClass().addClass('simpleTip-wrapper');
 				$(tip).on('mousemove', function(event) {
 					tipEle.css({
-						left : event.pageX + 12,
-						top : event.pageY + 24
+						left : event.pageX - 3,
+						top : event.pageY + 9
 					});
 				})
 			}
@@ -192,14 +196,14 @@
 				tip.timeoutToogle && clearTimeout(tip.timeoutToogle);
 				tip.timeoutToogle = setTimeout(function(){
 					if(hideOptions.animate == 'fade'){
-						$(tip.tipEle).stop().fadeOut();
+						$(tip.tipEle).stop().fadeOut(200);
 					}else{
 						$(tip.tipEle).hide();
 					}
 				}, hideOptions.delay);
 			}else{
 				if(hideOptions.animate == 'fade'){
-					$(tip.tipEle).stop().fadeOut();
+					$(tip.tipEle).stop().fadeOut(200);
 				}else{
 					$(tip.tipEle).hide();
 				}
