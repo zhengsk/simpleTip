@@ -5,16 +5,17 @@ $(function(){
 		content : "I'm a tooltip!"
 		,show : {
 			action : 'mouseenter'
-			,delay : 100
+			,delay : 200
 			,animate : 'fade'
 		}
 		,hide : {
 			action : 'mouseleave'
-			,delay : 100
+			,delay : 200
 			,animate : 'fade'
 		}
-		,position: 'right'		// tip 位置
-		,offset: {x:10, y:0}		// 定位偏移
+		,position : 'right'		// tip 位置
+		,spacing : 10			// tip 间距
+		,offset: {x:0, y:0}		// 定位偏移
 		,follow : false			// 跟随鼠标
 		,keep : true // 鼠标移上去保持显示
 	})

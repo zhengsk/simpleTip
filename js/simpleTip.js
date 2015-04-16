@@ -69,12 +69,15 @@
 
 			if(this.tipOptions.keep){	// 鼠标移上去保持显示
 				this.tipEle.on('mouseenter',function(){
-					if(target.timeoutHide){
-						clearTimeout(target.timeoutHide);
+					if(target.timeoutToogle){
+						clearTimeout(target.timeoutToogle);
 					};
 					oToolTip.show.call(target);
 				});
 				this.tipEle.on('mouseleave',function(){
+					if(target.timeoutToogle){
+						clearTimeout(target.timeoutToogle);
+					};
 					oToolTip.hide.call(target);
 				});
 			}
@@ -96,6 +99,7 @@
 			,animate : false
 		}
 		,position: 'right'		// tip 位置
+		,spacing : 10			// tip 间距
 		,offset: {x:0, y:0}		// 定位偏移
 		,follow : false			// 跟随鼠标
 		,keep : true 			// 鼠标移上去保持显示
@@ -117,25 +121,26 @@
 			var tipEle = obj.tipEle;
 			var position = obj.tipOptions.position;
 			var offset = obj.tipOptions.offset;
+			var spacing = obj.tipOptions.spacing;
 			var _left,_top;
 
 
 			switch(position){
 				case 'right' :
-					_left = $(obj).offset().left + $(obj).outerWidth() + offset.x;
+					_left = $(obj).offset().left + $(obj).outerWidth() + offset.x + spacing;
 					_top = $(obj).offset().top + ($(obj).outerHeight() - tipEle.outerHeight())/2 + offset.y;
 					break;
 				case 'left' :
-					_left = $(obj).offset().left - tipEle.outerWidth() + offset.x;
+					_left = $(obj).offset().left - tipEle.outerWidth() + offset.x - spacing;;
 					_top = $(obj).offset().top + ($(obj).outerHeight() - tipEle.outerHeight())/2 + offset.y;
 					break;
 				case 'top' :
 					_left = $(obj).offset().left + ($(obj).outerWidth() - tipEle.outerWidth())/2 + offset.x;
-					_top = $(obj).offset().top - tipEle.outerHeight() + offset.y;
+					_top = $(obj).offset().top - tipEle.outerHeight() + offset.y - spacing;
 					break;
 				case 'bottom' :
 					_left = $(obj).offset().left + ($(obj).outerWidth() - tipEle.outerWidth())/2 + offset.x;
-					_top = $(obj).offset().top + $(obj).outerHeight() + offset.y;
+					_top = $(obj).offset().top + $(obj).outerHeight() + offset.y + spacing;
 					break;
 			}
 
@@ -151,7 +156,8 @@
 			var showOptions = tip.tipOptions.show;
 
 			if(showOptions.delay){
-				setTimeout(function(){
+				tip.timeoutToogle && clearTimeout(tip.timeoutToogle);
+				tip.timeoutToogle = setTimeout(function(){
 					if(showOptions.animate == 'fade'){
 						$(tip.tipEle).stop().fadeIn();
 					}else{
@@ -168,7 +174,7 @@
 
 			if(follow){ // 跟随鼠标
 				var tipEle = tip.tipEle;
-				$(document).on('mousemove', function(event) {
+				$(tip).on('mousemove', function(event) {
 					tipEle.css({
 						left : event.pageX + 12,
 						top : event.pageY + 24
@@ -183,7 +189,8 @@
 			var hideOptions = tip.tipOptions.hide;
 
 			if(hideOptions.delay){
-				setTimeout(function(){
+				tip.timeoutToogle && clearTimeout(tip.timeoutToogle);
+				tip.timeoutToogle = setTimeout(function(){
 					if(hideOptions.animate == 'fade'){
 						$(tip.tipEle).stop().fadeOut();
 					}else{
@@ -200,7 +207,7 @@
 
 			if(tip.tipOptions.follow){ // 清除跟随鼠标
 				var tipEle = tip.tipEle;
-				$(document).off('mousemove');
+				$(tip).off('mousemove');
 			}
 		}
 
