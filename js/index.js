@@ -2,14 +2,24 @@
 $(function(){
 
 	$('#div1 li').simpleTip({
-		content : "I'm a tooltip too!",
-		action : {		
-			show : 'mouseover',
-			hide : 'mouseout'
+		content : "I'm a tooltip!"
+		,show : {
+			action : 'mouseenter'
+			,delay : 200
+			,animate : 'fade'
 		}
-		,position : 'right'
-		,offset : 5
-	}).css("fontFamily","微软雅黑").eq(1).simpleTip('show');	
+		,hide : {
+			action : 'mouseleave'
+			,delay : 200
+			,animate : 'fade'
+		}
+		,position : 'right'		// tip 位置
+		,spacing : 10			// tip 间距
+		,offset: {x:0, y:0}		// 定位偏移
+		,follow : false			// 跟随鼠标
+		,keep : true // 鼠标移上去保持显示
+	})
+	.css("fontFamily","微软雅黑")//.eq(1).simpleTip('show');	
 
 
 	$('#div1 li').on('click', function() {
@@ -39,7 +49,12 @@ $(function(){
 	});
 
 	$('#createTip').bind('click', function(){
-		$('#div1 li').eq(0).simpleTip({content:'what\'s you name'});
+		$('#div1 li').eq(0).simpleTip({content:'what\'s you name'}).simpleTip('show');
 	});
+
+	$('#followTip').bind('click', function(){
+		$('#div1 li').eq(1).simpleTip('follow', true);
+	});
+
 
 });
