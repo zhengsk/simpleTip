@@ -83,9 +83,9 @@
 			,delay : 0
 			,animate : false
 		}
-		,follow : false	// 跟随鼠标 
-		,offset: {x:0, y:0} // 定位偏移
-		,position: 'left' // tip 位置
+		,position: 'left'		// tip 位置
+		,offset: {x:0, y:0}		// 定位偏移
+		,follow : false			// 跟随鼠标 
 	};
 	
 	var oToolTip = {
