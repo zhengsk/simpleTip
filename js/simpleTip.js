@@ -99,7 +99,7 @@
 			,animate : false
 		}
 		,position: 'right'		// tip 位置
-		,spacing : 10			// tip 间距
+		,spacing : 2			// tip 间距
 		,offset: {x:0, y:0}		// 定位偏移
 		,follow : false			// 跟随鼠标
 		,keep : true 			// 鼠标移上去保持显示
