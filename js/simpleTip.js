@@ -42,6 +42,13 @@
 						}
 					});
 					break;
+				case "follow" :
+					return this.each(function(){
+						if(this.oTipEle){
+							value && (this.tipOptions = $.extend({}, this.tipOptions)) && (this.tipOptions.follow = value);
+						}
+					});
+					break;
 			}
 			return;
 		}
@@ -66,12 +73,17 @@
 	//为参数设置默认值
 	$.fn.simpleTip.defaults = {
 		content : "I'm a tooltip!"
-		,action : {		
+		,action : {	// 显示隐藏事件
 			show : 'mouseover'
 			,hide : 'mouseout'
 		}
-		,offset: 0
-		,position: 'left'
+		,delay : {	// 显示隐藏延迟
+			show : 0,
+			hide : 0
+		}
+		,follow : false	// 跟随鼠标 
+		,offset: {x:0, y:0} // 定位偏移
+		,position: 'left' // tip 位置
 	};
 	
 	var oToolTip = {
@@ -85,27 +97,31 @@
 
 		//定位
 		,setPosition: function(obj){
+			
+			if(obj.tipOptions.follow){return;} // 跟随鼠标
+			
 			var tipEle = obj.oTipEle;
 			var position = obj.tipOptions.position;
 			var offset = obj.tipOptions.offset;
 			var _left,_top;
 
+
 			switch(position){
 				case 'right' :
-					_left = $(obj).offset().left + $(obj).outerWidth() + offset;
-					_top = $(obj).offset().top + ($(obj).outerHeight() - tipEle.outerHeight())/2;
+					_left = $(obj).offset().left + $(obj).outerWidth() + offset.x;
+					_top = $(obj).offset().top + ($(obj).outerHeight() - tipEle.outerHeight())/2 + offset.y;
 					break;
 				case 'left' :
-					_left = $(obj).offset().left - tipEle.outerWidth() - offset;
-					_top = $(obj).offset().top + ($(obj).outerHeight() - tipEle.outerHeight())/2;
+					_left = $(obj).offset().left - tipEle.outerWidth() + offset.x;
+					_top = $(obj).offset().top + ($(obj).outerHeight() - tipEle.outerHeight())/2 + offset.y;
 					break;
 				case 'top' :
-					_left = $(obj).offset().left + ($(obj).outerWidth() - tipEle.outerWidth())/2;
-					_top = $(obj).offset().top - tipEle.outerHeight() - offset;
+					_left = $(obj).offset().left + ($(obj).outerWidth() - tipEle.outerWidth())/2 + offset.x;
+					_top = $(obj).offset().top - tipEle.outerHeight() + offset.y;
 					break;
 				case 'bottom' :
-					_left = $(obj).offset().left + ($(obj).outerWidth() - tipEle.outerWidth())/2;
-					_top = $(obj).offset().top + $(obj).outerHeight() + offset;
+					_left = $(obj).offset().left + ($(obj).outerWidth() - tipEle.outerWidth())/2 + offset.x;
+					_top = $(obj).offset().top + $(obj).outerHeight() + offset.y;
 					break;
 			}
 
@@ -114,13 +130,42 @@
 
 		//显示tooltip,并为其定位
 		,show: function(){
-			oToolTip.setPosition(this);
-			$(this.oTipEle).css('display', 'block');
+			var tip = this;
+			oToolTip.setPosition(tip);
+
+			var delayShow = tip.tipOptions.delay.show;
+			if(delayShow){
+				setTimeout(function(){$(tip.oTipEle).show()}, delayShow);
+			}else{
+				$(tip.oTipEle).show()
+			}
+
+			if(tip.tipOptions.follow){ // 跟随鼠标
+				var oTipEle = tip.oTipEle;
+				$(document).on('mousemove', function(event) {
+					oTipEle.css({
+						left : event.pageX + 12,
+						top : event.pageY + 24
+					});
+				})
+			}
 		}
 
 		//隐藏tooltip
 		,hide: function(){
-			$(this.oTipEle).css('display', 'none');
+			var tip = this;
+			
+			var delayHide = tip.tipOptions.delay.hide;
+			if(delayHide){
+				setTimeout(function(){$(tip.oTipEle).hide()}, delayHide);
+			}else{
+				$(tip.oTipEle).hide()
+			}
+
+			if(tip.tipOptions.follow){ // 清除跟随鼠标
+				var oTipEle = tip.oTipEle;
+				$(document).off('mousemove');
+			}
 		}
 
 		//取消tooltip功能

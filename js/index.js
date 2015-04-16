@@ -8,8 +8,8 @@ $(function(){
 			hide : 'mouseout'
 		}
 		,position : 'right'
-		,offset : 5
-	}).css("fontFamily","微软雅黑").eq(1).simpleTip('show');	
+		//,offset : {x:5, y:5}
+	}).css("fontFamily","微软雅黑")//.eq(1).simpleTip('show');	
 
 
 	$('#div1 li').on('click', function() {
@@ -41,5 +41,10 @@ $(function(){
 	$('#createTip').bind('click', function(){
 		$('#div1 li').eq(0).simpleTip({content:'what\'s you name'});
 	});
+
+	$('#followTip').bind('click', function(){
+		$('#div1 li').eq(1).simpleTip('follow', true);
+	});
+
 
 });
