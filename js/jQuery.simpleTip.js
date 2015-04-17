@@ -7,57 +7,19 @@
  * 时间：20150417
  */
 
-(function ($){
+(function ($) {
 
-	$.fn.simpleTip = function (options, value){
+    $.fn.simpleTip = function (options, value) {
 
-		if($.type(options) == "string"){
-			switch (options){
-				case "show" : 
-					return this.each(function(){
-						this.tipEle && oToolTip.show.call(this);
-					});
-					break;
-				case "hide" :
-					return this.each(function(){
-						this.tipEle && oToolTip.hide.call(this);
-					});
-					break;
-				case "destroy" :
-					return this.each(function(){
-						this.tipEle && oToolTip.destroy(this);
-					});
-					break;
-				case "content" :
-					return this.each(function(){
-						value && (this.tipOptions = $.extend({}, this.tipOptions));
-						oToolTip.setContent(this, value); //setContent
-						oToolTip.setPosition(this); // 如果已经显示则刷新位置
-					});
-					break;
-				case "position" :
-					return this.each(function(){
-						if(this.tipEle){
-							value && (this.tipOptions = $.extend({}, this.tipOptions));
-							oToolTip.setPosition(this, value);
-						}
-					});
-					break;
-				case "follow" :
-					return this.each(function(){
-						if(this.tipEle){
-							value && (this.tipOptions = $.extend({}, this.tipOptions)) && (this.tipOptions.follow = value);
-						}
-					});
-					break;
-			}
-			return;
+		if($.type(options) == "string") { //调用后修改simpleTip方法
+			oToolTip.setTip.call(this, options, value);
+			return this;
 		}
 
 		var _opts = $.extend( true, {}, $.fn.simpleTip.defaults, options);
-		return this.each(function(){
+		return this.each(function() {
 			var target = this;
-			if(this.tipOptions){ //如果已经存在则注销，在重新创建
+			if(this.tipOptions) { //如果已经存在则注销，在重新创建
 				$(this).simpleTip('destroy');
 			}
 
@@ -69,21 +31,20 @@
 			$(this).on(this.tipOptions.show.action, oToolTip.show);
 			$(this).on(this.tipOptions.hide.action, oToolTip.hide);
 
-			if(this.tipOptions.keep){	// 鼠标移上去保持显示
-				this.tipEle.on('mouseenter',function(){
-					if(target.timeoutToogle){
+			if(this.tipOptions.keep) {	// 鼠标移上去保持显示
+				this.tipEle.on('mouseenter',function() {
+					if(target.timeoutToogle) {
 						clearTimeout(target.timeoutToogle);
 					};
 					oToolTip.show.call(target);
 				});
-				this.tipEle.on('mouseleave',function(){
-					if(target.timeoutToogle){
+				this.tipEle.on('mouseleave',function() {
+					if(target.timeoutToogle) {
 						clearTimeout(target.timeoutToogle);
 					};
 					oToolTip.hide.call(target);
 				});
 			}
-
 		});
 	}
 
@@ -118,7 +79,7 @@
 	var oToolTip = {
 
 		//创建DIV
-		createTip: function(obj){
+		createTip: function(obj) {
 			var tipEle = $('<div></div>').addClass("simpleTip-wrapper");	// 为tooltip设置class,并将tooltip标签追加到文档中
 			var tipArrow = $('<span class="simpleTip-arrow"></span>');	// 为tooltip 方向箭头
 			var tipContent = tipEle.tipContent = $('<div class="simpleTip-content"></div>');	// 内容容器
@@ -129,15 +90,15 @@
 		}
 
 		// set toolTip content
-		,setContent : function(obj, value){
+		,setContent : function(obj, value) {
 			value !== undefined && (obj.tipOptions.content = value);
 			obj.tipEle && obj.tipEle.tipContent.html(obj.tipOptions.content);
 			return obj;
 		}
 
 		//定位
-		,setPosition: function(obj, value){
-			if(obj.tipOptions.follow){return;} // 跟随鼠标
+		,setPosition: function(obj, value) {
+			if(obj.tipOptions.follow) {return;} // 跟随鼠标
 			
 			var tipEle = obj.tipEle;
 			var position = value && (obj.tipOptions.position = value) || obj.tipOptions.position;
@@ -146,7 +107,7 @@
 			var _left,_top;
 
 
-			switch(position){
+			switch(position) {
 				case 'right' :
 					_left = $(obj).offset().left + $(obj).outerWidth() + offset.x + spacing;
 					_top = $(obj).offset().top + ($(obj).outerHeight() - tipEle.outerHeight())/2 + offset.y;
@@ -177,22 +138,22 @@
 			// 显示状态是否发生变化
 			var isChangeVisable = (funName === "show" && tip.tipIsShowed === false) || (funName === "hide" && tip.tipIsShowed === true);
 
-			if(beforeFun && isChangeVisable){ // beforeShow function
+			if(beforeFun && isChangeVisable) { // beforeShow function
 				var isCancel = beforeFun.call(tip);
-				if(isCancel === false){ // 如果返回false则取消显示或隐藏
+				if(isCancel === false) { // 如果返回false则取消显示或隐藏
 					return false;
 				}
 			}
 
 			// 显示状态是否发生变化后执行回调
-			var _afterChange = function(){
-				if(isChangeVisable){
+			var _afterChange = function() {
+				if(isChangeVisable) {
 					afterFun && afterFun.call(tip);
 					tip.tipIsShowed = funName === "show" ? true : false;; //设置是否显示属性
 				}
 			}
 
-			if(showOptions.animate === 'fade'){
+			if(showOptions.animate === 'fade') {
 				var fun = funName === "show" ? "fadeIn" : "fadeOut";
 				$(tip.tipEle).stop()[fun](200, _afterChange);
 			}else{
@@ -201,22 +162,22 @@
 		}
 
 		//显示tooltip,并为其定位
-		,show: function(){
+		,show: function() {
 			var tip = this;
 			oToolTip.setPosition(tip);
 
 			var delay = tip.tipOptions.show.delay;
 
-			if(delay){
+			if(delay) {
 				tip.timeoutToogle && clearTimeout(tip.timeoutToogle);
-				tip.timeoutToogle = setTimeout(function(){
+				tip.timeoutToogle = setTimeout(function() {
 					oToolTip._display(tip, 'show');
 				}, delay);
 			}else{
 				oToolTip._display(tip, 'show');
 			}
 
-			if(tip.tipOptions.follow){ // 跟随鼠标
+			if(tip.tipOptions.follow) { // 跟随鼠标
 				var tipEle = tip.tipEle;
 				tipEle.removeClass().addClass('simpleTip-wrapper');
 				$(tip).on('mousemove.simpleTip', function(event) {
@@ -229,45 +190,88 @@
 		}
 
 		//隐藏tooltip
-		,hide: function(){
+		,hide: function() {
 			var tip = this;
 			var delay = tip.tipOptions.hide.delay;
 
-			if(delay){
+			if(delay) {
 				tip.timeoutToogle && clearTimeout(tip.timeoutToogle);
-				tip.timeoutToogle = setTimeout(function(){
+				tip.timeoutToogle = setTimeout(function() {
 					oToolTip._display(tip, 'hide');
 				}, delay);
 			}else{
 				oToolTip._display(tip, 'hide');
 			}
 
-			if(tip.tipOptions.follow){ // 清除跟随鼠标
+			if(tip.tipOptions.follow) { // 清除跟随鼠标
 				var tipEle = tip.tipEle;
 				$(tip).off('mousemove.simpleTip');
 			}
 		}
 
 		//destory tooltip
-		,destroy: function(ele){
-			if(ele.tipOptions){
+		,destroy: function(ele) {
+			if(ele.tipOptions) {
 				var beforeFun = ele.tipOptions.events.beforeDestroy;
 				var afterFun = ele.tipOptions.events.afterDestroy;
 				
-				if(beforeFun){	// call before destory , return false to cancel destory
+				if(beforeFun) {	// call before destory , return false to cancel destory
 					var isCancel = beforeFun.call(ele);
-					if(isCancel === false){return false;}
+					if(isCancel === false) {return false;}
 				}
 
 				$(ele).off(ele.tipOptions.show.action, oToolTip.show).off(ele.tipOptions.hide.action, oToolTip.hide);
 				ele.tipEle.remove();
 				ele.tipEle = ele.tipOptions = ele.tipIsShowed = null;
 
-				if(afterFun){	// call after destroy
+				if(afterFun) {	// call after destroy
 					afterFun.call(ele);
 				}
 			}
 		}
+
+        //call/change tooltip function or options
+        ,setTip: function(name, value){
+            switch (name) {
+                case "show" : 
+                    return this.each(function() {
+                        this.tipEle && oToolTip.show.call(this);
+                    });
+                    break;
+                case "hide" :
+                    return this.each(function() {
+                        this.tipEle && oToolTip.hide.call(this);
+                    });
+                    break;
+                case "destroy" :
+                    return this.each(function() {
+                        this.tipEle && oToolTip.destroy(this);
+                    });
+                    break;
+                case "content" :
+                    return this.each(function() {
+                        value && (this.tipOptions = $.extend({}, this.tipOptions));
+                        oToolTip.setContent(this, value); //setContent
+                        oToolTip.setPosition(this); // 如果已经显示则刷新位置
+                    });
+                    break;
+                case "position" :
+                    return this.each(function() {
+                        if(this.tipEle) {
+                            value && (this.tipOptions = $.extend({}, this.tipOptions));
+                            oToolTip.setPosition(this, value);
+                        }
+                    });
+                    break;
+                case "follow" :
+                    return this.each(function() {
+                        if(this.tipEle) {
+                            value && (this.tipOptions = $.extend({}, this.tipOptions)) && (this.tipOptions.follow = value);
+                        }
+                    }); 
+                    break;
+            }
+        }
 	}
 
 })(jQuery);
