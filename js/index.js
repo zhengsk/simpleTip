@@ -20,16 +20,22 @@ $(function(){
 		,keep : true // 鼠标移上去保持显示
 		,events	 : {
 			beforeShow : function(tip) {
-				console.info('beforeShow')
-			}
-			,beforeHide : function(tip) {
-				console.info('beforeHide')
+				console.info('beforeShow');
 			}
 			,afterShow : function(tip) {
 				console.info('afterShow')
 			}
+			,beforeHide : function(tip) {
+				console.info('beforeHide')
+			}
 			,afterHide : function(tip) {
 				console.info('afterHide')
+			}
+			,beforeDestroy : function(tip) {
+				console.info('beforeDestroy');
+			}
+			,afterDestroy : function(tip) {
+				console.info('afterDestroy')
 			}
 		}
 	})
@@ -70,7 +76,8 @@ $(function(){
 					console.info('beforeShow')
 				}
 				,beforeHide : function(tip) {
-					console.info('beforeHide')
+					console.info('beforeHide');
+					return 0;
 				}
 				,afterShow : function(tip) {
 					console.info('afterShow')

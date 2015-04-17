@@ -1,6 +1,9 @@
 # simpleTip
 A simple jQuery toolTip plugin
 
+## Version 1.2
+* add beforeDestroy callBack function, _return false to cancel destroy toolTip_
+* add afterDestroy callBack function
     // JavaScript Document 
     $(function(){
   
@@ -45,3 +48,4 @@ A simple jQuery toolTip plugin
           	$('#div1 li').eq(0).simpleTip({content:'what\'s you name'});
           });
     });
+

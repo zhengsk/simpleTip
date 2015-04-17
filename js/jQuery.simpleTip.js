@@ -62,7 +62,7 @@
 
 			this.tipOptions = _opts;
 			this.tipEle = oToolTip.createTip(this); //为参数对象创建tooltip
-			this.isShowed = false;
+			this.tipIsShowed = false;
 
 			// 绑定显示tooltip和隐藏tooltip的方法
 			$(this).on(this.tipOptions.show.action, oToolTip.show);
@@ -105,10 +105,12 @@
 		,follow : false			// 跟随鼠标
 		,keep : true 			// 鼠标移上去保持显示
 		,events	 : {
-			beforeShow : false
-			,beforeHide : false
+			 beforeShow : false
 			,afterShow : false
+			,beforeHide : false
 			,afterHide : false
+			,beforeDestroy : false
+			,afterDestroy : false
 		}
 	};
 	
@@ -164,17 +166,20 @@
 			var afterFun = tip.tipOptions.events['after' + funName.charAt(0).toUpperCase()+ funName.substr(1)];
 
 			// 显示状态是否发生变化
-			var isChangeVisable = (funName === "show" && tip.isShowed === false) || (funName === "hide" && tip.isShowed === true);
+			var isChangeVisable = (funName === "show" && tip.tipIsShowed === false) || (funName === "hide" && tip.tipIsShowed === true);
 
 			if(beforeFun && isChangeVisable){ // beforeShow function
-				beforeFun.call(tip);
+				var isCancel = beforeFun.call(tip);
+				if(isCancel === false){ // 如果返回false则取消显示或隐藏
+					return false;
+				}
 			}
 
 			// 显示状态是否发生变化后执行回调
 			var _afterChange = function(){
 				if(isChangeVisable){
 					afterFun && afterFun.call(tip);
-					tip.isShowed = funName === "show" ? true : false;; //设置是否显示属性
+					tip.tipIsShowed = funName === "show" ? true : false;; //设置是否显示属性
 				}
 			}
 
@@ -234,12 +239,24 @@
 			}
 		}
 
-		//取消tooltip功能
+		//destory tooltip
 		,destroy: function(ele){
 			if(ele.tipOptions){
+				var beforeFun = ele.tipOptions.events.beforeDestroy; // beforeDestroy function
+				var afterFun = ele.tipOptions.events.afterDestroy; // afterDestroy function
+				
+				if(beforeFun){	// call before destory , return false to cancel destory
+					var isCancel = beforeFun.call(ele);
+					if(isCancel === false){return false;}
+				}
+
 				$(ele).off(ele.tipOptions.show.action, oToolTip.show).off(ele.tipOptions.hide.action, oToolTip.hide);
 				ele.tipEle.remove();
-				ele.tipEle = ele.tipOptions = null;
+				ele.tipEle = ele.tipOptions = ele.tipIsShowed = null;
+
+				if(afterFun){	// call after destroy
+					afterFun.call(ele);
+				}
 			}
 		}
 	}
