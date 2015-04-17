@@ -15,13 +15,16 @@
 .simpleTip-arrow{
 	width:0;
 	height: 0;
+	font-size: 0;
+	overflow: hidden;
 	position: absolute;
-	border: 10px solid transparent;
+	border: 10px dashed transparent;
 	top:50%; left:0;
 }
 
 .left .simpleTip-arrow{
 	border-left-color: #0CF;
+	border-left-style: solid;
 	top:50%; left:100%;
 	margin-top: -10px;
 	margin-left: -10px;
@@ -29,6 +32,7 @@
 
 .right .simpleTip-arrow{
 	border-right-color: #0CF;
+	border-right-style: solid;
 	top:50%; left:0;
 	margin-top: -10px;
 	margin-left: -10px;
@@ -36,6 +40,7 @@
 
 .top .simpleTip-arrow{
 	border-top-color: #0CF;
+	border-top-style: solid;
 	top:100%; left:50%;
 	margin-top: -10px;
 	margin-left: -10px;
@@ -43,6 +48,7 @@
 
 .bottom .simpleTip-arrow{
 	border-bottom-color: #0CF;
+	border-bottom-style: solid;
 	top:0; left:50%;
 	margin-top: -10px;
 	margin-left: -10px;

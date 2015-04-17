@@ -30,15 +30,16 @@
 					break;
 				case "content" :
 					return this.each(function(){
-						this.tipEle && this.tipEle.tipContent.html(value || '');
+						value && (this.tipOptions = $.extend({}, this.tipOptions));
+						oToolTip.setContent(this, value); //setContent
 						oToolTip.setPosition(this); // 如果已经显示则刷新位置
 					});
 					break;
 				case "position" :
 					return this.each(function(){
 						if(this.tipEle){
-							value && (this.tipOptions = $.extend({}, this.tipOptions)) && (this.tipOptions.position = value);
-							oToolTip.setPosition(this);
+							value && (this.tipOptions = $.extend({}, this.tipOptions));
+							oToolTip.setPosition(this, value);
 						}
 					});
 					break;
@@ -60,9 +61,9 @@
 				$(this).simpleTip('destroy');
 			}
 
+			this.tipIsShowed = false;
 			this.tipOptions = _opts;
 			this.tipEle = oToolTip.createTip(this); //为参数对象创建tooltip
-			this.tipIsShowed = false;
 
 			// 绑定显示tooltip和隐藏tooltip的方法
 			$(this).on(this.tipOptions.show.action, oToolTip.show);
@@ -118,20 +119,28 @@
 
 		//创建DIV
 		createTip: function(obj){
-			var oText = $.parseHTML(obj.tipOptions.content);	// 创建一个内容为content的文本节点
 			var tipEle = $('<div></div>').addClass("simpleTip-wrapper");	// 为tooltip设置class,并将tooltip标签追加到文档中
 			var tipArrow = $('<span class="simpleTip-arrow"></span>');	// 为tooltip 方向箭头
-			var tipContent = tipEle.tipContent = $('<div class="simpleTip-content"></div>').append($(oText));	// 内容容器
+			var tipContent = tipEle.tipContent = $('<div class="simpleTip-content"></div>');	// 内容容器
 			tipEle.append(tipArrow).append(tipContent).appendTo('body');
+			obj.tipEle = tipEle;
+			oToolTip.setContent(obj); // set content
 			return tipEle;
 		}
 
+		// set toolTip content
+		,setContent : function(obj, value){
+			value !== undefined && (obj.tipOptions.content = value);
+			obj.tipEle && obj.tipEle.tipContent.html(obj.tipOptions.content);
+			return obj;
+		}
+
 		//定位
-		,setPosition: function(obj){
+		,setPosition: function(obj, value){
 			if(obj.tipOptions.follow){return;} // 跟随鼠标
 			
 			var tipEle = obj.tipEle;
-			var position = obj.tipOptions.position;
+			var position = value && (obj.tipOptions.position = value) || obj.tipOptions.position;
 			var offset = obj.tipOptions.offset;
 			var spacing = obj.tipOptions.spacing;
 			var _left,_top;
@@ -210,7 +219,7 @@
 			if(tip.tipOptions.follow){ // 跟随鼠标
 				var tipEle = tip.tipEle;
 				tipEle.removeClass().addClass('simpleTip-wrapper');
-				$(tip).on('mousemove', function(event) {
+				$(tip).on('mousemove.simpleTip', function(event) {
 					tipEle.css({
 						left : event.pageX - 3,
 						top : event.pageY + 9
@@ -235,15 +244,15 @@
 
 			if(tip.tipOptions.follow){ // 清除跟随鼠标
 				var tipEle = tip.tipEle;
-				$(tip).off('mousemove');
+				$(tip).off('mousemove.simpleTip');
 			}
 		}
 
 		//destory tooltip
 		,destroy: function(ele){
 			if(ele.tipOptions){
-				var beforeFun = ele.tipOptions.events.beforeDestroy; // beforeDestroy function
-				var afterFun = ele.tipOptions.events.afterDestroy; // afterDestroy function
+				var beforeFun = ele.tipOptions.events.beforeDestroy;
+				var afterFun = ele.tipOptions.events.afterDestroy;
 				
 				if(beforeFun){	// call before destory , return false to cancel destory
 					var isCancel = beforeFun.call(ele);
