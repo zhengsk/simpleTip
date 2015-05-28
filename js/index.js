@@ -8,12 +8,12 @@ $(function(){
 		// ,className : 'simpleTip-wrapper'
 		,show : {
 			action : 'mouseenter'
-			,delay : 200
+			,delay : 50
 			,animate : 'fade'
 		}
 		,hide : {
 			action : 'mouseleave'
-			,delay : 200
+			,delay : 50
 			,animate : 'fade'
 		}
 		,position : 'right'		// tip 位置
@@ -44,6 +44,9 @@ $(function(){
 	})
 	.css("fontFamily","微软雅黑")//.eq(1).simpleTip('show');	
 
+	$('#attributeTip').on('click', function() {
+		$(this).simpleTip();
+	});
 
 	$('#div1 li').eq(2).on('click', function() {
 		$(this).simpleTip('position', (['top', 'right', 'bottom', 'left'])[Math.floor(Math.random()*4)])

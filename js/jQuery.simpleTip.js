@@ -19,12 +19,21 @@
 		var _opts = $.extend( true, {}, $.fn.simpleTip.defaults, options);
 		return this.each(function() {
 			var target = this;
-			if(this.tipOptions) { //如果已经存在则注销，在重新创建
+			if(this.tipOptions) { //如果已经存在则注销，再重新创建
 				$(this).simpleTip('destroy');
 			}
 
+			// 属性参数设置
+			var attrOptions = $(this).attr('simpleTip-options');
+			if(attrOptions){
+				// debugger;
+				// attrOptions = parseJSON(attrOptions);
+				// this.tipOptions = $.extend( true, {}, _opts, attrOptions);
+			}else{
+				this.tipOptions = _opts;
+			}
+
 			this.tipIsShowed = false;
-			this.tipOptions = _opts;
 			this.tipEle = oToolTip.createTip(this); //为参数对象创建tooltip
 
 			// 绑定显示tooltip和隐藏tooltip的方法
@@ -50,7 +59,7 @@
 
 	//为参数设置默认值
 	$.fn.simpleTip.defaults = {
-		content : "I'm a tooltip!"
+		content : "tooltip content!"
 		,show : {
 			action : 'mouseenter'
 			,delay : 0
