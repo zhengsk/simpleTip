@@ -290,6 +290,7 @@
                     return this.each(function() {
                         if(this.tipEle) {
                             (value !== undefined) && (this.tipOptions = $.extend({}, this.tipOptions)) && (this.tipOptions.follow = value);
+                            oToolTip.setPosition(this);
                         }
                     }); 
                     break;

@@ -97,5 +97,11 @@ $(function(){
 		$('#div1 li').eq(1).simpleTip('follow', true);
 	});
 
+	$('#unfollowTip').bind('click', function(){
+		$('#div1 li').eq(1).simpleTip('follow', false);
+	});
+
+	
+
 
 });
