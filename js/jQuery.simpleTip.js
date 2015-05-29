@@ -99,7 +99,7 @@
 		//创建DIV
 		createTip: function(obj) {
 			var tipEle = $('<div></div>').addClass("simpleTip-wrapper");	// 为tooltip设置class,并将tooltip标签追加到文档中
-			var tipArrow = $('<span class="simpleTip-arrow"></span>');	// 为tooltip 方向箭头
+			var tipArrow = $('<span class="simpleTip-arrow"><span></span></span>');	// 为tooltip 方向箭头
 			var tipContent = tipEle.tipContent = $('<div class="simpleTip-content"></div>');	// 内容容器
 			tipEle.append(tipArrow).append(tipContent).appendTo('body');
 			obj.tipEle = tipEle;

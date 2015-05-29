@@ -8,49 +8,74 @@
 
 .simpleTip-content{
 	padding:10px;
-	background: #0CF;
+	background: #FFF;
 	border-radius: 4px;
 	box-shadow: 0 0 6px -2px;
+	border: 1px solid #0CF;
 }
 
-.simpleTip-arrow{
+.simpleTip-arrow,
+.simpleTip-arrow span{
 	width:0;
 	height: 0;
 	font-size: 0;
-	overflow: hidden;
 	position: absolute;
 	border: 10px dashed transparent;
 	top:50%; left:0;
 }
 
-.left .simpleTip-arrow{
+.simpleTip-arrow span{overflow: hidden; }
+
+
+.left .simpleTip-arrow,
+.left .simpleTip-arrow span{
 	border-left-color: #0CF;
 	border-left-style: solid;
 	top:50%; left:100%;
 	margin-top: -10px;
 	margin-left: -10px;
 }
+.left .simpleTip-arrow span{
+	border-left-color: #FFF;
+	margin-left: -11px;
+}
 
-.right .simpleTip-arrow{
+.right .simpleTip-arrow,
+.right .simpleTip-arrow span{
 	border-right-color: #0CF;
 	border-right-style: solid;
 	top:50%; left:0;
 	margin-top: -10px;
 	margin-left: -10px;
 }
+.right .simpleTip-arrow span{
+	border-right-color: #FFF;
+	margin-left: -9px;
+}
 
-.top .simpleTip-arrow{
+.top .simpleTip-arrow,
+.top .simpleTip-arrow span{
 	border-top-color: #0CF;
 	border-top-style: solid;
 	top:100%; left:50%;
 	margin-top: -10px;
 	margin-left: -10px;
 }
+.top .simpleTip-arrow span{
+	border-top-color: #FFF;
+	margin-top: -11px;
+}
 
-.bottom .simpleTip-arrow{
+
+.bottom .simpleTip-arrow,
+.bottom .simpleTip-arrow span{
 	border-bottom-color: #0CF;
 	border-bottom-style: solid;
 	top:0; left:50%;
 	margin-top: -10px;
 	margin-left: -10px;
+}
+.bottom .simpleTip-arrow span{
+	border-bottom-color: #FFF;
+	margin-top: -9px;
 }
