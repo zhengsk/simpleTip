@@ -1,7 +1,7 @@
 // JavaScript Document 
 $(function(){
 
-	$('#div1 li').eq(0).simpleTip({
+	$('#div1 li').simpleTip({
 		content : "I'm a tooltip!"
 		// ,width : 'auto'
 		// ,height : 'auto'

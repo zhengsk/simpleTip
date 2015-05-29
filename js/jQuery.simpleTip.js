@@ -44,7 +44,9 @@
 
 			this.tipIsShowed = false;
 			this.tipEle = oToolTip.createTip(this); //为参数对象创建tooltip
-			this.tipOptions.initShow && oToolTip.show.call(this); //默认显示
+
+			/* add setTimout to fix the outHeigh bug */
+			this.tipOptions.initShow && setTimeout(function(){oToolTip.show.call(target)}, 0); //默认显示
 
 			// 绑定显示tooltip和隐藏tooltip的方法
 			$(this).on(this.tipOptions.show.action, oToolTip.show);
@@ -145,8 +147,6 @@
 					_top = $(obj).offset().top + $(obj).outerHeight() + offset.y + spacing;
 					break;
 			}
-
-			console.warn($(obj).outerHeight());
 
 			$(tipEle).removeClass().addClass(position + ' simpleTip-wrapper').css({"top":_top + "px","left":_left + "px"});			// 定位tooltip
 		}
