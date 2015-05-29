@@ -44,9 +44,7 @@ $(function(){
 	})
 	.css("fontFamily","微软雅黑")//.eq(1).simpleTip('show');	
 
-	$('#attributeTip').on('click', function() {
-		$(this).simpleTip();
-	});
+	$('#attributeTip').simpleTip();
 
 	$('#div1 li').eq(2).on('click', function() {
 		$(this).simpleTip('position', (['top', 'right', 'bottom', 'left'])[Math.floor(Math.random()*4)])

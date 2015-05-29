@@ -23,12 +23,20 @@
 				$(this).simpleTip('destroy');
 			}
 
-			// 属性参数设置
-			var attrOptions = $(this).attr('simpleTip-options');
-			if(attrOptions){
-				// debugger;
-				// attrOptions = parseJSON(attrOptions);
-				// this.tipOptions = $.extend( true, {}, _opts, attrOptions);
+			// 属性参数设置 reference from EasyUI
+			var attrOptions = null;
+			if(true){
+				var optionsStr = $.trim($(this).attr("tip-options"));
+				if (optionsStr) {
+					if (optionsStr.substring(0, 1) !== "{") {
+						optionsStr = "{" + optionsStr + "}";
+					}
+					attrOptions = (new Function("return " + optionsStr))();
+				}
+			}
+
+			if(attrOptions){ // 只有有simpleTip-options时才去复制公共_opts，否则使用公共，利于节省内存
+				this.tipOptions = $.extend( true, {}, _opts, attrOptions);
 			}else{
 				this.tipOptions = _opts;
 			}
