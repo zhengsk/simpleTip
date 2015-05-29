@@ -16,7 +16,8 @@
 			return this;
 		}
 
-		var _opts = $.extend( true, {}, $.fn.simpleTip.defaults, options);
+		var _opts = $.extend( true, {}, $.fn.simpleTip.defaults, options); //同一批toolTip使用同一个options，节省内存开销
+
 		return this.each(function() {
 			var target = this;
 			if(this.tipOptions) { //如果已经存在则注销，再重新创建
@@ -267,7 +268,7 @@
                     break;
                 case "content" :
                     return this.each(function() {
-                        value && (this.tipOptions = $.extend({}, this.tipOptions));
+                        (value !== undefined) && (this.tipOptions = $.extend({}, this.tipOptions));
                         oToolTip.setContent(this, value); //setContent
                         oToolTip.setPosition(this); // 如果已经显示则刷新位置
                     });
@@ -283,7 +284,7 @@
                 case "follow" :
                     return this.each(function() {
                         if(this.tipEle) {
-                            value && (this.tipOptions = $.extend({}, this.tipOptions)) && (this.tipOptions.follow = value);
+                            (value !== undefined) && (this.tipOptions = $.extend({}, this.tipOptions)) && (this.tipOptions.follow = value);
                         }
                     }); 
                     break;
