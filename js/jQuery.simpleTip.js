@@ -251,6 +251,11 @@
         //call/change tooltip function or options
         ,setTip: function(name, value){
             switch (name) {
+                case "toggle" : 
+                    return this.each(function() {
+                        this.tipIsShowed ? oToolTip.hide.call(this) : oToolTip.show.call(this);
+                    });
+                    break;
                 case "show" : 
                     return this.each(function() {
                         this.tipEle && oToolTip.show.call(this);
