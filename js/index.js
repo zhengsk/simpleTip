@@ -1,8 +1,8 @@
 // JavaScript Document 
 $(function(){
 
-	$('#div1 li').eq(0).simpleTip({
-		content : "I'm a tooltip!"
+	$('#div1 li').simpleTip({
+		content : "I'm a <br/> tooltip!"
 		// ,width : 'auto'
 		// ,height : 'auto'
 		// ,className : 'simpleTip-wrapper'
@@ -16,7 +16,6 @@ $(function(){
 			,delay : 50
 			,animate : 'fade'
 		}
-		,initShow : true
 		,position : 'right'		// tip 位置
 		,spacing : 2			// tip 间距
 		,offset: {x:0, y:0}		// 定位偏移
@@ -45,7 +44,7 @@ $(function(){
 	})
 	.css("fontFamily","微软雅黑")//.eq(1).simpleTip('show');	
 
-	//$('#attributeTip').simpleTip();
+	$('#attributeTip').simpleTip();
 
 	$('#div1 li').eq(2).on('click', function() {
 		$(this).simpleTip('position', (['top', 'right', 'bottom', 'left'])[Math.floor(Math.random()*4)])
@@ -101,6 +100,8 @@ $(function(){
 	$('#unfollowTip').bind('click', function(){
 		$('#div1 li').eq(1).simpleTip('follow', false);
 	});
+
+	
 
 
 });
