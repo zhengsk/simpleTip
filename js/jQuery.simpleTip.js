@@ -50,13 +50,13 @@
 			$(this).on(this.tipOptions.hide.action, oToolTip.hide);
 
 			if(this.tipOptions.keep) {	// 鼠标移上去保持显示
-				this.tipEle.on('mouseenter',function() {
+				this.tipEle.on(this.tipOptions.show.action, function() {
 					if(target.timeoutToogle) {
 						clearTimeout(target.timeoutToogle);
 					};
 					oToolTip.show.call(target);
 				});
-				this.tipEle.on('mouseleave',function() {
+				this.tipEle.on(this.tipOptions.hide.action, function() {
 					if(target.timeoutToogle) {
 						clearTimeout(target.timeoutToogle);
 					};

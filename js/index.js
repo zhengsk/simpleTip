@@ -20,7 +20,7 @@ $(function(){
 		,spacing : 2			// tip 间距
 		,offset: {x:0, y:0}		// 定位偏移
 		,follow : false			// 跟随鼠标
-		,keep : true // 鼠标移上去保持显示
+		,keep : true 			// 鼠标移上去保持显示
 		,events	 : {
 			beforeShow : function(tip) {
 				console.info('beforeShow');
