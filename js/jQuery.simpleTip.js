@@ -44,6 +44,7 @@
 
 			this.tipIsShowed = false;
 			this.tipEle = oToolTip.createTip(this); //为参数对象创建tooltip
+			this.tipOptions.initShow && oToolTip.show.call(this); //默认显示
 
 			// 绑定显示tooltip和隐藏tooltip的方法
 			$(this).on(this.tipOptions.show.action, oToolTip.show);
@@ -79,6 +80,7 @@
 			,delay : 0
 			,animate : false
 		}
+		,initShow : true		// init show or hide
 		,position: 'right'		// tip 位置
 		,spacing : 2			// tip 间距
 		,offset: {x:0, y:0}		// 定位偏移
@@ -143,6 +145,8 @@
 					_top = $(obj).offset().top + $(obj).outerHeight() + offset.y + spacing;
 					break;
 			}
+
+			console.warn($(obj).outerHeight());
 
 			$(tipEle).removeClass().addClass(position + ' simpleTip-wrapper').css({"top":_top + "px","left":_left + "px"});			// 定位tooltip
 		}
