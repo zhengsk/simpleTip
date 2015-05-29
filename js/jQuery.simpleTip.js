@@ -197,13 +197,9 @@
 
 			if(tip.tipOptions.follow) { // 跟随鼠标
 				var tipEle = tip.tipEle;
-				tipEle.removeClass().addClass('simpleTip-wrapper');
-				$(tip).on('mousemove.simpleTip', function(event) {
-					tipEle.css({
-						left : event.pageX - 3,
-						top : event.pageY + 9
-					});
-				})
+				tipEle.removeClass().addClass('simpleTip-wrapper'); // remove arrow
+
+				oToolTip._toggleMouseFollow(tip, true);
 			}
 		}
 
@@ -222,7 +218,20 @@
 			}
 
 			if(tip.tipOptions.follow) { // 清除跟随鼠标
-				var tipEle = tip.tipEle;
+				oToolTip._toggleMouseFollow(tip, false);
+			}
+		}
+
+		// on/off tooptip follow mouse function
+		,_toggleMouseFollow: function(tip, isFollow){
+			if(isFollow){
+				$(tip).on('mousemove.simpleTip', function(event) {
+					tip.tipEle.css({
+						left : event.pageX - 3,
+						top : event.pageY + 9
+					});
+				});
+			}else{
 				$(tip).off('mousemove.simpleTip');
 			}
 		}
@@ -291,6 +300,7 @@
                         if(this.tipEle) {
                             (value !== undefined) && (this.tipOptions = $.extend({}, this.tipOptions)) && (this.tipOptions.follow = value);
                             oToolTip.setPosition(this);
+                            oToolTip._toggleMouseFollow(this, false);
                         }
                     }); 
                     break;
