@@ -89,7 +89,8 @@
 		,follow : false			// 跟随鼠标
 		,keep : true 			// 鼠标移上去保持显示
 		,events	 : {
-			 beforeShow : false
+			beforeContent : false
+			,beforeShow : false
 			,afterShow : false
 			,beforeHide : false
 			,afterHide : false
@@ -102,9 +103,9 @@
 
 		//创建DIV
 		createTip: function(obj) {
-			var tipEle = $('<div></div>').addClass("simpleTip-wrapper");	// 为tooltip设置class,并将tooltip标签追加到文档中
+			var tipEle = $('<div></div>').addClass("simpleTip-wrapper"); // 为tooltip设置class,并将tooltip标签追加到文档中
 			var tipArrow = $('<span class="simpleTip-arrow"><span></span></span>');	// 为tooltip 方向箭头
-			var tipContent = tipEle.tipContent = $('<div class="simpleTip-content"></div>');	// 内容容器
+			var tipContent = tipEle.tipContent = $('<div class="simpleTip-content"></div>'); // 内容容器
 			tipEle.append(tipArrow).append(tipContent).appendTo('body');
 			obj.tipEle = tipEle;
 			oToolTip.setContent(obj); // set content
@@ -113,8 +114,16 @@
 
 		// set toolTip content
 		,setContent : function(obj, value) {
-			value !== undefined && (obj.tipOptions.content = value);
-			obj.tipEle && obj.tipEle.tipContent.html(obj.tipOptions.content);
+			if(value === undefined){
+				value = obj.tipOptions.content;
+			}else{
+				obj.tipOptions.content = value;
+			}
+			var beforeContentFun = obj.tipOptions.events.beforeContent;
+			if(beforeContentFun){
+				value = beforeContentFun.call(obj, value) || value;
+			}
+			obj.tipEle && obj.tipEle.tipContent.html(value);
 			return obj;
 		}
 
@@ -158,7 +167,8 @@
 			var afterFun = tip.tipOptions.events['after' + funName.charAt(0).toUpperCase()+ funName.substr(1)];
 
 			// 显示状态是否发生变化
-			var isChangeVisable = (funName === "show" && tip.tipIsShowed === false) || (funName === "hide" && tip.tipIsShowed === true);
+			var isChangeVisable = (funName === "show" && tip.tipIsShowed === false) 
+								  || (funName === "hide" && tip.tipIsShowed === true);
 
 			if(beforeFun && isChangeVisable) { // beforeShow function
 				var isCancel = beforeFun.call(tip);
@@ -302,7 +312,10 @@
                 case "follow" :
                     return this.each(function() {
                         if(this.tipEle) {
-                            (value !== undefined) && (this.tipOptions = $.extend({}, this.tipOptions)) && (this.tipOptions.follow = value);
+                            (value !== undefined) && 
+                            (this.tipOptions = $.extend({}, this.tipOptions)) && 
+                            (this.tipOptions.follow = value);
+
                             oToolTip.setPosition(this);
                             oToolTip._toggleMouseFollow(this, false);
                         }
