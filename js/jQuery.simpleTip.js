@@ -72,30 +72,33 @@
 	//为参数设置默认值
 	$.fn.simpleTip.defaults = {
 		content : "tooltip content!"
-		,show : {
-			action : 'mouseenter'
-			,delay : 0
+		,show   : {
+			action   : 'mouseenter'
+			,delay   : 0
 			,animate : false
 		}
-		,hide : {
-			action : 'mouseleave'
-			,delay : 0
+		,hide  : {
+			action   : 'mouseleave'
+			,delay   : 0
 			,animate : false
 		}
-		,initShow : true		// init show or hide
-		,position: 'right'		// tip 位置
-		,spacing : 2			// tip 间距
-		,offset: {x:0, y:0}		// 定位偏移
-		,follow : false			// 跟随鼠标
-		,keep : true 			// 鼠标移上去保持显示
-		,events	 : {
-			beforeContent : false
-			,beforeShow : false
-			,afterShow : false
-			,beforeHide : false
-			,afterHide : false
+		,initShow : true			// init show or hide
+		,classes  : 'simpleTip ddd'		// class name
+		,width    : null			// width
+		,height   : null			// hieght
+		,position : 'right'			// tip 位置
+		,spacing  : 2				// tip 间距
+		,offset   : {x:0, y:0}		// 定位偏移
+		,follow   : false			// 跟随鼠标
+		,keep     : true 			// 鼠标移上去保持显示
+		,events	  : {
+			beforeContent  : false
+			,beforeShow    : false
+			,afterShow     : false
+			,beforeHide    : false
+			,afterHide     : false
 			,beforeDestroy : false
-			,afterDestroy : false
+			,afterDestroy  : false
 		}
 	};
 	
@@ -103,7 +106,7 @@
 
 		//创建DIV
 		createTip: function(obj) {
-			var tipEle = $('<div></div>').addClass("simpleTip-wrapper"); // 为tooltip设置class,并将tooltip标签追加到文档中
+			var tipEle = $('<div></div>').addClass(obj.tipOptions.classes); // 为tooltip设置class,并将tooltip标签追加到文档中
 			var tipArrow = $('<span class="simpleTip-arrow"><span></span></span>');	// 为tooltip 方向箭头
 			var tipContent = tipEle.tipContent = $('<div class="simpleTip-content"></div>'); // 内容容器
 			tipEle.append(tipArrow).append(tipContent).appendTo('body');
@@ -157,7 +160,7 @@
 					break;
 			}
 
-			$(tipEle).removeClass().addClass(position + ' simpleTip-wrapper').css({"top":_top + "px","left":_left + "px"});			// 定位tooltip
+			$(tipEle).removeClass().addClass(position + ' ' + obj.tipOptions.classes).css({"top":_top + "px","left":_left + "px"});			// 定位tooltip
 		}
 
 		//设置显示/隐藏tooltip, 内部方法, funName: ['show'|'hide']
@@ -211,7 +214,7 @@
 
 			if(tip.tipOptions.follow) { // 跟随鼠标
 				var tipEle = tip.tipEle;
-				tipEle.removeClass().addClass('simpleTip-wrapper'); // remove arrow
+				tipEle.removeClass().addClass(obj.tipOptions.classes); // remove arrow
 
 				oToolTip._toggleMouseFollow(tip, true);
 			}

@@ -5,7 +5,7 @@ $(function(){
 		content : "I'm a tooltip!"
 		// ,width : 'auto'
 		// ,height : 'auto'
-		// ,className : 'simpleTip-wrapper'
+		// ,classes : 'simpleTip'
 		,show : {
 			action : 'mouseenter'
 			,delay : 50
