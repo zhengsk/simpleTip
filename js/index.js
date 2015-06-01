@@ -55,6 +55,12 @@ $(function(){
 		}
 	});
 
+	$('#userName').simpleTip({
+		initShow : false
+		,show : {action: 'focus'}
+		,hide : {action: 'blur'}
+	});
+
 	$('#div1 li').eq(2).on('click', function() {
 		$(this).simpleTip('position', (['top', 'right', 'bottom', 'left'])[Math.floor(Math.random()*4)])
 	})

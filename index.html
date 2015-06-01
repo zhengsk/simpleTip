@@ -37,7 +37,6 @@
             <li tip-options="{position:'left'}">③version1.5&nbsp;&nbsp;2015.3.14
             	<h3>修改的内容：</h3>
                 <p>1.实现一次性绑定多个Dom的toolTip功能</p>
-                <p>2.以参数的方式实现，显示和隐藏toolTip的动作类型</p>
 			</li>
             <li tip-options="{position:'bottom'}">④version1.6&nbsp;&nbsp;2015.3.19-21
             	<h3>修改的内容：</h3>
@@ -46,34 +45,9 @@
             <li>⑤version1.7&nbsp;&nbsp;2015.3.25
                 <h3>修改的内容：</h3>
                 <p>1.var oText = document.createTextNode(opt.content)；一次只能动态创建一个文本节点，故：应放入循环中，使得动态创建i个节点</p>
-                <p>2.绑定隐藏的方法第三个参数应返回一个函数，故：function noneEvent(obj){}要return一个方法</p>
-            </li>
-            <li>⑥version1.8&nbsp;&nbsp;2015.3.26
-                <h3>修改的内容：</h3>
-                <p>1.不应该将创建div元素的具体动作放在循环中，而应该使用方法调用，增加代码的可读性</p>
-                <p>2.将调用的方法移出循环，放入外部，增加代码性能</p>
-            </li>
-            <li>⑦version1.9&nbsp;&nbsp;2015.3.31
-                <h3>修改的内容：</h3>
-                <p>1.添加并实现”显示”按钮功能</p>
-            </li>
-            <li>⑧version1.10&nbsp;&nbsp;2015.4.1
-                <h3>修改的内容：</h3>
-                <p>1.修改“显示”、“隐藏”按钮调用方法，使用容易理解的方式调用，便于扩展</p>
-            </li>
-            <li>⑨version1.11&nbsp;&nbsp;2015.4.1
-                <h3>修改的内容：包括内部变量和方法的命名等</h3>
-                <p>1.代码规范</p>
-            </li>
-            <li>⑩version2.1&nbsp;&nbsp;2015.4.3
-                <h3>修改的内容：</h3>
-                <p>1.使用jQuery改写tooltip</p>
-            </li>
-            <li>⑪version2.2&nbsp;&nbsp;2015.4.7
-                <h3>修改的内容：</h3>
-                <p>1.使用$.extend(),this.each()进一步简化代码</p>
             </li>
         </ul>
+        <input id="userName" type="text" name="userName" value="zsk" style="width:200px;" tip-options="{content:'请填写姓名', postion:'right'}" />
     </div>
 </body>
 </html>
