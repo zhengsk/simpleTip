@@ -83,9 +83,9 @@
 			,animate : false
 		}
 		,initShow : true			// init show or hide
-		,classes  : 'simpleTip ddd'		// class name
-		,width    : null			// width
-		,height   : null			// hieght
+		,classes  : 'simpleTip'		// class name
+		,width    : null			// width  TODO
+		,height   : null			// hieght  TODO
 		,position : 'right'			// tip 位置
 		,spacing  : 2				// tip 间距
 		,offset   : {x:0, y:0}		// 定位偏移
